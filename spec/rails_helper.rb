@@ -9,7 +9,8 @@ require 'rspec/rails'
 
 # специальные "матчеры" - методы, удобные для тестирования валидаций
 Shoulda::Matchers.configure do |config|
-  config.integrate do |with| with.test_framework :rspec
+  config.integrate do |with|
+    with.test_framework :rspec
     with.library :rails
   end
 end

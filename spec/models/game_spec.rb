@@ -91,12 +91,14 @@ RSpec.describe Game, type: :model do
         game_w_questions.finished_at = Time.now
         expect(game_w_questions.answer_current_question!([*('a'..'d')].sample))
           .to be_falsey
+        expect(game_w_questions.finished?).to be_truthy
       end
 
       it 'return false if time out' do
         game_w_questions.created_at = 1.hour.ago
         expect(game_w_questions.answer_current_question!('d'))
           .to be_falsey
+        expect(game_w_questions.finished?).to be_truthy
       end
 
       it 'finish game if answer correct and last level' do
@@ -108,6 +110,7 @@ RSpec.describe Game, type: :model do
         expect(game_w_questions.is_failed).to be_falsey
         expect(game_w_questions.finished_at).to be_within(1.second).of(Time.now)
         expect(user.balance).to eq(Game::PRIZES.max)
+        expect(game_w_questions.finished?).to be_truthy
       end
 
       it 'incorrect answer finish the game' do
@@ -119,6 +122,7 @@ RSpec.describe Game, type: :model do
 
         expect(game_w_questions.is_failed).to be_truthy
         expect(game_w_questions.finished_at).to be_within(1.second).of(Time.now)
+        expect(game_w_questions.finished?).to be_truthy
       end
 
       it 'correct answer continue the game' do
@@ -128,6 +132,7 @@ RSpec.describe Game, type: :model do
         game_w_questions.answer_current_question!('d')
 
         expect(game_w_questions.current_level).to eq(current_level + 1)
+        expect(game_w_questions.finished?).to be_falsey
       end
     end
   end

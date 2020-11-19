@@ -88,7 +88,56 @@ RSpec.describe Game, type: :model do
     it '.previous_level' do
       game_w_questions.game_questions.size.times do |i|
         game_w_questions.current_level = i
-        expect(game_w_questions.previous_level).to eq(i - 1)
+        expect(game_w_questions.previous_level).to eq(game_w_questions.current_level - 1)
+      end
+    end
+
+    context '.answer_current_question!()' do
+      it 'return false if game finished' do
+        game_w_questions.finished_at = Time.now
+        expect(game_w_questions.answer_current_question!([*('a'..'d')].sample))
+          .to be_falsey
+      end
+
+      it 'return false if time out' do
+        game_w_questions.created_at = 1.hour.ago
+        game_w_questions.is_failed = true
+        expect(game_w_questions.answer_current_question!([*('a'..'d')].sample))
+          .to be_falsey
+      end
+
+      it 'finish game if answer correct and last level' do
+        game_w_questions.current_level = Question::QUESTION_LEVELS.max
+        correct_answer_key = game_w_questions.current_game_question.correct_answer_key
+
+        game_w_questions.answer_current_question!(correct_answer_key)
+
+        expect(game_w_questions.prize).to eq(Game::PRIZES.max)
+        expect(game_w_questions.is_failed).to be_falsey
+        expect(game_w_questions.finished_at).to be_within(1.second).of(Time.now)
+        expect(user.balance).to eq(Game::PRIZES.max)
+      end
+
+      it 'incorrect answer finish the game' do
+        game_w_questions.current_level = Question::QUESTION_LEVELS.to_a.sample
+        correct_answer_key = game_w_questions.current_game_question.correct_answer_key
+
+        expect(game_w_questions.answer_current_question!(
+          ([*('a'..'d')] - [correct_answer_key]).sample
+        )).to be_falsey
+
+        expect(game_w_questions.is_failed).to be_truthy
+        expect(game_w_questions.finished_at).to be_within(1.second).of(Time.now)
+      end
+
+      it 'correct answer continue the game' do
+        current_level = Question::QUESTION_LEVELS.to_a.tap(&:pop).sample
+        game_w_questions.current_level = current_level
+        correct_answer_key = game_w_questions.current_game_question.correct_answer_key
+
+        game_w_questions.answer_current_question!(correct_answer_key)
+
+        expect(game_w_questions.current_level).to eq(current_level + 1)
       end
     end
   end

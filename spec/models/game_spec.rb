@@ -95,16 +95,14 @@ RSpec.describe Game, type: :model do
 
       it 'return false if time out' do
         game_w_questions.created_at = 1.hour.ago
-        game_w_questions.is_failed = true
-        expect(game_w_questions.answer_current_question!([*('a'..'d')].sample))
+        expect(game_w_questions.answer_current_question!('d'))
           .to be_falsey
       end
 
       it 'finish game if answer correct and last level' do
         game_w_questions.current_level = Question::QUESTION_LEVELS.max
-        correct_answer_key = game_w_questions.current_game_question.correct_answer_key
 
-        game_w_questions.answer_current_question!(correct_answer_key)
+        game_w_questions.answer_current_question!('d')
 
         expect(game_w_questions.prize).to eq(Game::PRIZES.max)
         expect(game_w_questions.is_failed).to be_falsey
@@ -114,10 +112,9 @@ RSpec.describe Game, type: :model do
 
       it 'incorrect answer finish the game' do
         game_w_questions.current_level = Question::QUESTION_LEVELS.to_a.sample
-        correct_answer_key = game_w_questions.current_game_question.correct_answer_key
 
         expect(game_w_questions.answer_current_question!(
-          ([*('a'..'d')] - [correct_answer_key]).sample
+          ([*('a'..'c')]).sample
         )).to be_falsey
 
         expect(game_w_questions.is_failed).to be_truthy
@@ -127,9 +124,8 @@ RSpec.describe Game, type: :model do
       it 'correct answer continue the game' do
         current_level = Question::QUESTION_LEVELS.to_a.tap(&:pop).sample
         game_w_questions.current_level = current_level
-        correct_answer_key = game_w_questions.current_game_question.correct_answer_key
 
-        game_w_questions.answer_current_question!(correct_answer_key)
+        game_w_questions.answer_current_question!('d')
 
         expect(game_w_questions.current_level).to eq(current_level + 1)
       end

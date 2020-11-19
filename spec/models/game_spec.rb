@@ -79,17 +79,11 @@ RSpec.describe Game, type: :model do
     end
 
     it '.current_game_question' do
-      game_w_questions.game_questions.each_with_index do |q, i|
-        game_w_questions.current_level = i
-        expect(game_w_questions.current_game_question).to eq(q)
-      end
+      expect(game_w_questions.current_game_question).to eq(game_w_questions.game_questions[0])
     end
 
     it '.previous_level' do
-      game_w_questions.game_questions.size.times do |i|
-        game_w_questions.current_level = i
-        expect(game_w_questions.previous_level).to eq(game_w_questions.current_level - 1)
-      end
+      expect(game_w_questions.previous_level).to eq(-1)
     end
 
     context '.answer_current_question!()' do

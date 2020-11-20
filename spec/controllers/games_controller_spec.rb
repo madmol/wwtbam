@@ -106,6 +106,21 @@ RSpec.describe GamesController, type: :controller do
       expect(flash.empty?).to be_truthy # удачный ответ не заполняет flash
     end
 
+    it 'answers incorrect' do
+      game_w_questions.update_attribute(:current_level, 11)
+      # передаем параметр params[:letter]
+      put :answer, id: game_w_questions.id, letter: [*'a'..'c'].sample
+      game = assigns(:game)
+
+      expect(game.finished?).to be_truthy
+      expect(game.prize).to eq(32_000)
+      expect(flash[:alert]).to be
+
+      user.reload
+      expect(response).to redirect_to(user_path(user))
+      expect(user.balance).to eq(32_000)
+    end
+
     # тест на отработку "помощи зала"
     it 'uses audience help' do
       # сперва проверяем что в подсказках текущего вопроса пусто

@@ -1,6 +1,8 @@
 # (c) goodprogrammer.ru
 # Объявление фабрики для создания нужных в тестах объектов
+#
 # Cм. другие примеры на
+#
 # http://www.rubydoc.info/gems/factory_girl/file/GETTING_STARTED.md
 
 FactoryBot.define do

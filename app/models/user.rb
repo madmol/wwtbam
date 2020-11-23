@@ -1,22 +1,26 @@
 #  (c) goodprogrammer.ru
 #
-# Юзер — он и в Африке юзер, только в Африке черный :)
+# Модель Пользователя
 class User < ActiveRecord::Base
-  devise :database_authenticatable, :registerable, :recoverable, :validatable, :rememberable
+  devise :database_authenticatable, :registerable, :recoverable,
+         :validatable, :rememberable
 
-  # имя не пустое, email валидирует Devise
+  # Имя не пустое, email валидирует Devise
   validates :name, presence: true
 
-  # поле только булевское (лож/истина) - недопустимо nil
+  # Поле is_admin может быть только булевское (лож/истина), также запрещаем
+  # ситуацию, когда в этом поле nil.
   validates :is_admin, inclusion: {in: [true, false]}, allow_nil: false
 
-  # это поле должно быть только целым числом, значение nil - недопустимо
+  # Это поле должно быть только целым числом, также запрещаем ситуацию, когда
+  # в этом поле nil.
   validates :balance, numericality: {only_integer: true}, allow_nil: false
 
-  # у юзера много игр, они удалятся из базы вместе с ним
+  # У юзера много игр, они удалятся из базы вместе с ним
   has_many :games, dependent: :destroy
 
-  # расчет среднего выигрыша по всем играм юзера
+  # Метод average_price просто рассчитывает средний выигрыш пользователя
+  # по всем его играм.
   def average_prize
     (balance.to_f/games.count).round unless games.count.zero?
   end

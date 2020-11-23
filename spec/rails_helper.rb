@@ -7,7 +7,7 @@ require 'spec_helper'
 require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
 
-# специальные "матчеры" - методы, удобные для тестирования валидаций
+# Специальные "матчеры" - методы, удобные для тестирования валидаций
 Shoulda::Matchers.configure do |config|
   config.integrate do |with|
     with.test_framework :rspec

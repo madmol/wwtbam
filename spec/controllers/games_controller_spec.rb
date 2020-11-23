@@ -167,7 +167,7 @@ RSpec.describe GamesController, type: :controller do
       # записалась
       expect(game.finished?).to be_falsey
       expect(game.fifty_fifty_used).to be_truthy
-      expect(game.current_game_question.help_hash[:fifty_fifty]).to be
+      expect(game.current_game_question.help_hash[:fifty_fifty]).to be_an Array
       expect(game.current_game_question.help_hash[:fifty_fifty].size).to eq(2)
       expect(game.current_game_question.help_hash[:fifty_fifty]).to include('d')
       expect(response).to redirect_to(game_path(game))

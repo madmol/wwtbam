@@ -25,7 +25,7 @@ RSpec.describe GameQuestion, type: :model do
 
     it 'correct .answer_correct?' do
       # Именно под буквой b в тесте мы спрятали указатель на верный ответ
-      expect(game_question.answer_correct?('b')).to be_truthy
+      expect(game_question.answer_correct?('b')).to be true
     end
 
     it 'correct .level & .text delegates' do
@@ -99,6 +99,4 @@ RSpec.describe GameQuestion, type: :model do
       expect(fc).to include("считает, что это вариант")
     end
   end
-
-
 end

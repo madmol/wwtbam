@@ -64,7 +64,7 @@ RSpec.describe Game, type: :model do
       expect(game_w_questions.current_game_question).not_to eq(q)
       # Игра продолжается
       expect(game_w_questions.status).to eq(:in_progress)
-      expect(game_w_questions.finished?).to be_falsey
+      expect(game_w_questions.finished?).to be false
     end
 
     it 'take_money! finishes the game' do
@@ -80,7 +80,7 @@ RSpec.describe Game, type: :model do
 
       # Проверяем что закончилась игра и пришли деньги игроку
       expect(game_w_questions.status).to eq :money
-      expect(game_w_questions.finished?).to be_truthy
+      expect(game_w_questions.finished?).to be true
       expect(user.balance).to eq prize
     end
 
@@ -98,14 +98,14 @@ RSpec.describe Game, type: :model do
       it 'return false if game finished' do
         game_w_questions.finished_at = Time.now
         expect(game_w_questions.answer_current_question!([*('a'..'d')].sample))
-          .to be_falsey
-        expect(game_w_questions.finished?).to be_truthy
+          .to be false
+        expect(game_w_questions.finished?).to be true
       end
 
       it 'return false if time out' do
         game_w_questions.created_at = 1.hour.ago
         expect(game_w_questions.answer_current_question!('d'))
-          .to be_falsey
+          .to be false
         expect(game_w_questions.finished?).to be_truthy
       end
 
@@ -115,10 +115,10 @@ RSpec.describe Game, type: :model do
         game_w_questions.answer_current_question!('d')
 
         expect(game_w_questions.prize).to eq(Game::PRIZES.max)
-        expect(game_w_questions.is_failed).to be_falsey
+        expect(game_w_questions.is_failed).to be false
         expect(game_w_questions.finished_at).to be_within(1.second).of(Time.now)
         expect(user.balance).to eq(Game::PRIZES.max)
-        expect(game_w_questions.finished?).to be_truthy
+        expect(game_w_questions.finished?).to be true
       end
 
       it 'incorrect answer finish the game' do
@@ -128,9 +128,9 @@ RSpec.describe Game, type: :model do
           ([*('a'..'c')]).sample
         )).to be_falsey
 
-        expect(game_w_questions.is_failed).to be_truthy
+        expect(game_w_questions.is_failed).to be true
         expect(game_w_questions.finished_at).to be_within(1.second).of(Time.now)
-        expect(game_w_questions.finished?).to be_truthy
+        expect(game_w_questions.finished?).to be true
       end
 
       it 'correct answer continue the game' do
@@ -140,7 +140,7 @@ RSpec.describe Game, type: :model do
         game_w_questions.answer_current_question!('d')
 
         expect(game_w_questions.current_level).to eq(current_level + 1)
-        expect(game_w_questions.finished?).to be_falsey
+        expect(game_w_questions.finished?).to be false
       end
     end
   end
@@ -149,7 +149,7 @@ RSpec.describe Game, type: :model do
     # Перед каждым тестом "завершаем игру"
     before(:each) do
       game_w_questions.finished_at = Time.now
-      expect(game_w_questions.finished?).to be_truthy
+      expect(game_w_questions.finished?).to be true
     end
 
     it ':won' do

@@ -14,7 +14,12 @@ RSpec.describe 'users/show', type: :view do
       )
       allow(view).to receive(:current_user) { user }
 
-      stub_template("users/_game.html.erb" => "User game goes here")
+      assign(:games, [
+        double(:name => "First game"),
+        double(:name => "Second game")
+      ])
+
+      stub_template("users/_game.html.erb" => "<%= game.name %>")
 
       render
     end
@@ -23,12 +28,13 @@ RSpec.describe 'users/show', type: :view do
       expect(rendered).to match 'Вадик'
     end
 
-    it 'user can see link to change pass' do
+    it 'users can see link to change pass' do
       expect(rendered).to have_link('Сменить имя и пароль', href: '/users/edit.10')
     end
 
-    it 'shows games list' do
-      expect(rendered).to match 'User game goes here'
+    it "shows user's games list" do
+      expect(rendered).to match /First game/
+      expect(rendered).to match /Second game/
     end
   end
 
@@ -53,6 +59,13 @@ RSpec.describe 'users/show', type: :view do
         )
       }
 
+      assign(:games, [
+        double(:name => "First game"),
+        double(:name => "Second game")
+      ])
+
+      stub_template("users/_game.html.erb" => "<%= game.name %>")
+
       render
     end
 
@@ -60,8 +73,13 @@ RSpec.describe 'users/show', type: :view do
       expect(rendered).to match 'Вадик'
     end
 
-    it 'checks that other user cant see link to change pass' do
+    it 'checks that other users cant see link to change pass' do
       expect(rendered).not_to match 'Сменить имя и пароль'
+    end
+
+    it "shows user's games list" do
+      expect(rendered).to match /First game/
+      expect(rendered).to match /Second game/
     end
   end
 end

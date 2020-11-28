@@ -3,7 +3,7 @@ require 'rails_helper'
 # Тест на шаблон users/show.html.erb
 
 RSpec.describe 'users/show', type: :view do
-  let(:user) { FactoryBot.create(:user, name: 'Вадик', id: 10) }
+  let(:user) { FactoryBot.create(:user, name: 'Вадик') }
 
   before(:each) do
     assign(:user, user)
@@ -44,7 +44,7 @@ RSpec.describe 'users/show', type: :view do
     end
 
     it 'users can see link to change pass' do
-      expect(rendered).to have_link('Сменить имя и пароль', href: '/users/edit.10')
+      expect(rendered).to have_link('Сменить имя и пароль', href: "/users/edit.#{user.id}")
     end
   end
 end

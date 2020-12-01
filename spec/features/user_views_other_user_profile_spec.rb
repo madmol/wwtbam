@@ -45,29 +45,35 @@ RSpec.feature "USER views other user profile", type: :feature do
 
     expect(page).to have_selector :table
 
-    user_games_owner.games.each do |game|
-      expect(page).to have_content game.id
-      expect(page).to have_content I18n.l(game.created_at, format: :short)
-      expect(page).to have_content game.current_level
-      expect(page).to have_content number_to_currency game.prize
-      expect(page).to have_content case game.status
-                                   when :won
-                                     I18n.t('game_statuses.won')
-                                   when :fail
-                                     I18n.t('game_statuses.fail')
-                                   when :in_progress
-                                     I18n.t('game_statuses.in_progress')
-                                   end
-      expect(page).to have_content '50/50'
-      expect(page).to have_css(".fa.fa-phone")
-      expect(page).to have_css(".fa.fa-users")
+    expect(page).to have_content(game1.id)
+    expect(page).to have_content(game2.id)
+    expect(page).to have_content(game3.id)
 
-      expect(page).to have_content '#'
-      expect(page).to have_content 'Дата'
-      expect(page).to have_content 'Вопрос'
-      expect(page).to have_content 'Выигрыш'
-      expect(page).to have_content 'Подсказки'
-    end
+    expect(page).to have_content I18n.l(game1.created_at, format: :short)
+    expect(page).to have_content I18n.l(game2.created_at, format: :short)
+    expect(page).to have_content I18n.l(game3.created_at, format: :short)
+
+    expect(page).to have_content game1.current_level
+    expect(page).to have_content game2.current_level
+    expect(page).to have_content game3.current_level
+
+    expect(page).to have_content number_to_currency game1.prize
+    expect(page).to have_content number_to_currency game2.prize
+    expect(page).to have_content number_to_currency game3.prize
+
+    expect(page).to have_content I18n.t('game_statuses.won')
+    expect(page).to have_content I18n.t('game_statuses.fail')
+    expect(page).to have_content I18n.t('game_statuses.fail')
+
+    expect(page).to have_content('50/50', count: 3)
+    expect(page).to have_css('.fa.fa-phone', count: 3)
+    expect(page).to have_css('.fa.fa-users', count: 3)
+
+    expect(page).to have_content '#'
+    expect(page).to have_content 'Дата'
+    expect(page).to have_content 'Вопрос'
+    expect(page).to have_content 'Выигрыш'
+    expect(page).to have_content 'Подсказки'
   end
 
   scenario 'successfully and user views his own profile' do
@@ -82,28 +88,34 @@ RSpec.feature "USER views other user profile", type: :feature do
 
     expect(page).to have_selector :table
 
-    user_games_owner.games.each do |game|
-      expect(page).to have_content game.id
-      expect(page).to have_content I18n.l(game.created_at, format: :short)
-      expect(page).to have_content game.current_level
-      expect(page).to have_content number_to_currency game.prize
-      expect(page).to have_content case game.status
-                                   when :won
-                                     I18n.t('game_statuses.won')
-                                   when :fail
-                                     I18n.t('game_statuses.fail')
-                                   when :in_progress
-                                     I18n.t('game_statuses.in_progress')
-                                   end
-      expect(page).to have_content '50/50'
-      expect(page).to have_css(".fa.fa-phone")
-      expect(page).to have_css(".fa.fa-users")
+    expect(page).to have_content(game1.id)
+    expect(page).to have_content(game2.id)
+    expect(page).to have_content(game3.id)
 
-      expect(page).to have_content '#'
-      expect(page).to have_content 'Дата'
-      expect(page).to have_content 'Вопрос'
-      expect(page).to have_content 'Выигрыш'
-      expect(page).to have_content 'Подсказки'
-    end
+    expect(page).to have_content I18n.l(game1.created_at, format: :short)
+    expect(page).to have_content I18n.l(game2.created_at, format: :short)
+    expect(page).to have_content I18n.l(game3.created_at, format: :short)
+
+    expect(page).to have_content game1.current_level
+    expect(page).to have_content game2.current_level
+    expect(page).to have_content game3.current_level
+
+    expect(page).to have_content number_to_currency game1.prize
+    expect(page).to have_content number_to_currency game2.prize
+    expect(page).to have_content number_to_currency game3.prize
+
+    expect(page).to have_content I18n.t('game_statuses.won')
+    expect(page).to have_content I18n.t('game_statuses.fail')
+    expect(page).to have_content I18n.t('game_statuses.fail')
+
+    expect(page).to have_content('50/50', count: 3)
+    expect(page).to have_css('.fa.fa-phone', count: 3)
+    expect(page).to have_css('.fa.fa-users', count: 3)
+
+    expect(page).to have_content '#'
+    expect(page).to have_content 'Дата'
+    expect(page).to have_content 'Вопрос'
+    expect(page).to have_content 'Выигрыш'
+    expect(page).to have_content 'Подсказки'
   end
 end
